@@ -5,12 +5,12 @@
     	<title>React Demo</title>
   	</head>
   	<body>
-  		<script src=firsttestscript.js></script>
-  		<script src="node_modules/react/umd/react.development.js"></script>
+      <!-- app is the id to be called in the static file for react.js -->
+  		<div id="app"></div>
+    <!-- next to scripts are to call react and reactDOM-->
+  	<script src="node_modules/react/umd/react.development.js"></script>
 		<script src="node_modules/react-dom/umd/react-dom.development.js"></script>
-		<script>
-    		console.log(React);
-    		console.log(ReactDOM);
-		</script>
+    <!-- to call connected static js file -->
+		<script src="firsttestscript.js"></script>
   	</body>
 </html>
