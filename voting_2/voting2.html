@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voting App pt.2</title>
+</head>
+<body>
+    <!-- app to call in js and react -->
+    <div id="app"></div>
+    <!-- linking to js  -->
+    <link href="voting2.js">
+    <!-- React js scripts -->
+    <script src="node_modules/react/umd/react.development.js"></script>
+    <script src="node_modules/react-dom/umd/react-dom.development.js"></script>
+    <!-- babel sccript -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <!-- babel belongs in html script for now (-->
+    <script type="text/babel">
+        class VoteOption extends React.Component {
+            constructor(props) {
+                super(props);
+            }
+            handleCount(amt) {
+                const newAmt = this.props.count+amt;
+                const obj = {
+                    title:this.props.title,
+                    val:newAmt
+                };
+                this.props.updateCount(obj);
+            }
+            render() {
+                return (
+                    <div className="option">
+                       <h3>{this.props.count}</h3>
+                       <h1>{this.props.title}</h1>
+                       <button onClick={()=> this.handleCount(1)}>+</button>
+                    </div>
+                );
+            }
+        }
+        class VoteOptionList extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {options:this.props.options.map(a => ({title:a,val:0}))};
+            }
+            onUpdateCount(obj){
+                for(let idx=0;idx<this.state.options.length;idx++) {
+                    let options = {...this.state.options},
+                        opt = options[idx]
+                    if(opt.title == obj.title){
+                        options[idx] = obj;
+                        this.setState({options:Object.assign(this.state.options, options)});
+                        break;
+                    }
+                }
+            }
+            compare(a, b){
+                return b.val - a.val;
+            }
+            render() {
+                let sorted = [...this.state.options].sort(this.compare);
+                let optionList = sorted.map((option,idx) => 
+                    <VoteOption 
+                        key={idx} 
+                        title={option.title}
+                        count={option.val} 
+                        updateCount={(obj) => this.onUpdateCount(obj)}/>)
+                return (
+                    <div>
+                        {optionList}
+                    </div>
+                );
+            }
+        }
+        ReactDOM.render(
+            <VoteOptionList options={
+                ["React",
+                "Ember",
+                "Vue",
+                "Angular"]}/>,
+            document.getElementById('app')
+        );
+    </script>
+</body>
+</html>
